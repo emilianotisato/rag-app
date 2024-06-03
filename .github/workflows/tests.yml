@@ -20,6 +20,14 @@ jobs:
           coverage: none
       - name: Run composer install
         run: composer install -n --prefer-dist
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Build assets
+        run: npm run build
       - name: Prepare Laravel Application
         run: |
           mkdir -p database
