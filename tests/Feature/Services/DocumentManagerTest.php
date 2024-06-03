@@ -3,10 +3,15 @@
 namespace Tests\Feature\Services;
 
 use Tests\TestCase;
+use App\Models\Document;
+use App\Enums\DocumentType;
+use App\Jobs\ProcessPDFDocument;
+use App\Services\DocumentManager;
+use App\Jobs\ProcessWebPageDocument;
+use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 
 class DocumentManagerTest extends TestCase
 {
