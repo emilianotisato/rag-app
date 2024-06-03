@@ -33,6 +33,23 @@ class DocumentManagerTest extends TestCase
         });
 
         Queue::assertNotPushed(ProcessWebPageDocument::class);
+    }
+
+    #[Test]
+    public function it_can_create_an_collection_of_known_sized_chunks_from_document_raw_content()
+    {
+        $this->app->config->set('services.chunker', [
+            'size' => 500,
+        ]);
+        $document = Document::factory()->create([
+            'content' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet consectetur adipisicing elit. Odit assumenda nam illo accusamus laudantium pariatur ut doloremque ad, ex id aperiam. Optio quis saepe voluptatum consectetur tenetur nobis modi sit?",
+        ]);
+
+        $chunks = app(DocumentManager::class)->chunk($document);
+
+        $this->assertEquals('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', $chunks->first());
+
+        $this->assertEquals('Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit assumenda nam illo accusamus laudantium pariatur ut doloremque ad, ex id aperiam. Optio quis saepe voluptatum consectetur tenetur nobis modi sit?', $chunks->last());
         
     }
 }

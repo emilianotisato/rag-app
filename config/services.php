@@ -44,4 +44,7 @@ return [
     'pdftotext' => [
         'path' => env('PDF_TO_TEXT_PATH', '/usr/bin/pdftotext'),
     ],
+    'chunker' => [
+        'size' => 1000,
+    ],
 ];
