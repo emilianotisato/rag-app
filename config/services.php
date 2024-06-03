@@ -42,6 +42,6 @@ return [
     ],
 
     'pdftotext' => [
-        'path' => env('PDF_TO_TEXT_PATH', '/usr/local/bin/pdftotext'),
+        'path' => env('PDF_TO_TEXT_PATH', '/usr/bin/pdftotext'),
     ],
 ];
