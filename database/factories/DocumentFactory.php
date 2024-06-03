@@ -23,6 +23,7 @@ class DocumentFactory extends Factory
             'type' => $this->faker->randomElement([DocumentType::PDF, DocumentType::WEB_PAGE]),
             'path' => $this->faker->url,
             'status' => DocumentStatus::PENDING,
+            'content' => null,
             'error' => null,
             'processed_at' => null,
         ];

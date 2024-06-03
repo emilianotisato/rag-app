@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('path');
             $table->string('status')->default(DocumentStatus::PENDING);
+            $table->longText('content')->nullable();
             $table->json('error')->nullable();
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();

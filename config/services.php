@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'pinecone' => [
+        'api_key' => env('PINECONE_API_KEY'),
+        'environment' => env('PINECONE_ENVIRONMENT'),
+        'index_name' => env('PINECONE_INDEX_NAME', 'default'),
+    ],
+
+    'pdftotext' => [
+        'path' => env('PDF_TO_TEXT_PATH', '/usr/local/bin/pdftotext'),
+    ],
 ];
