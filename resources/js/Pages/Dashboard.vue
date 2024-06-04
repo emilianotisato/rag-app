@@ -1,5 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { router } from '@inertiajs/vue3'
 import { Head } from "@inertiajs/vue3";
 </script>
 
@@ -16,7 +17,7 @@ import { Head } from "@inertiajs/vue3";
         <div
           class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0"
         >
-          <div
+          <div @click="router.visit(route('document.index'))"
             class="rounded-bl-lg rounded-br-lg sm:rounded-bl-none group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
           >
             <div>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
-            $table->string('path');
+            $table->string('path')->nullable();
             $table->string('status')->default(DocumentStatus::PENDING);
             $table->longText('content')->nullable();
             $table->json('error')->nullable();
