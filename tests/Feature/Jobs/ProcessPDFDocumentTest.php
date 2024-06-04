@@ -61,7 +61,7 @@ class ProcessPDFDocumentTest extends TestCase
     #[Test]
     public function it_will_call_the_pinecone_upsert_api()
     {
-        $this->mockPineconeClient('/vectors/upsert');
+        $this->mockPineconeClient('vectors/upsert');
         
         OpenAI::fake([
             CreateResponse::fake(['Sample pdf data']),

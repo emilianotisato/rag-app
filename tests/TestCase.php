@@ -20,10 +20,13 @@ abstract class TestCase extends BaseTestCase
         ]);
     }
 
-    public function mockPineconeClient(string $route = '/*', array|string $returnContent = [], int $status = 200): void
+    public function mockPineconeClient(string $route = '*', array|string $returnContent = [], int $status = 200): void
     {
+        $host = rtrim( config('services.pinecone.index_host'), '/') . '/';
+        $route = ltrim($route, '/');
+        
         MockClient::global([
-            config('services.pinecone.index_name').$route => MockResponse::make(
+            $host.$route => MockResponse::make(
                 body: $returnContent,
                 status: $status,
             ),

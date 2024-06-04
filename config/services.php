@@ -37,8 +37,8 @@ return [
 
     'pinecone' => [
         'api_key' => env('PINECONE_API_KEY'),
-        'environment' => env('PINECONE_ENVIRONMENT'),
-        'index_name' => env('PINECONE_INDEX_NAME', 'default'),
+        'index_host' => env('PINECONE_INDEX_HOST'),
+        'index_name' => env('PINECONE_INDEX_NAME'),
     ],
 
     'pdftotext' => [

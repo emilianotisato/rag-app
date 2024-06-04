@@ -16,8 +16,6 @@ class DocumentController extends Controller
      */
     public function index()
     {
-       
-        // dd(Document::first());
         return Inertia::render('Documents/Index', [
             // TODO paginate documents in frontend
             'documents' => Document::all(),

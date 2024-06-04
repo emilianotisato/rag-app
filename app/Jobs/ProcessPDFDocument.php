@@ -46,15 +46,17 @@ class ProcessPDFDocument implements ShouldQueue
             'model' => 'text-embedding-3-small',
             'input' => $content->toArray(),
             ])->embeddings;
-        $pinecone = new Pinecone(config('services.pinecone.api_key'), config('services.pinecone.environment'));
+        $pinecone = new Pinecone(config('services.pinecone.api_key'), config('services.pinecone.index_host'));
 
         collect($embeddings)->chunk(20)->each(function (Collection $chunk, $chunkIndex) use ($pinecone, $content) {
-            $pinecone->setIndexHost(config('services.pinecone.index_name'))->data()->vectors()->upsert(
+            $pinecone->data()->vectors()->upsert(
                 vectors: $chunk->pluck('embedding')->map(fn ($embedding, $index) => [
                     'id' => (string) ($chunkIndex * 20 + $index),
                     'values' => $embedding,
                     'metadata' => [
-                        'text' => fn()=>dd($content[$chunkIndex * 20 + $index]),
+                        'text' => $content[$chunkIndex * 20 + $index],
+                        'document_id' => $this->document->id,
+                        'type' => $this->document->type->value,
                     ]
                 ])->toArray(),
             );
