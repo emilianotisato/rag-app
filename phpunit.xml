@@ -31,6 +31,5 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="PINECONE_API_KEY" value="fake-api-key"/>
         <env name="PINECONE_INDEX_HOST" value="https://fake-index.pinecone.io"/>
-        <env name="PINECONE_INDEX_NAME" value="fake-index-name"/>
     </php>
 </phpunit>
