@@ -42,8 +42,6 @@ class ChatController extends Controller
             'prompt' => 'required|string|min:3',
         ]);
         
-        // $document = DocumentManager::create($request->input('content'));
-
         $chat->messages()->create([
             'content' => $request->input('prompt'),
             'is_user' => true,
