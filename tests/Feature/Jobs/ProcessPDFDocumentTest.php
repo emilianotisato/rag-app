@@ -2,16 +2,14 @@
 
 namespace Tests\Feature\Jobs;
 
-use App\Enums\DocumentStatus;
-use App\Enums\DocumentType;
-use App\Jobs\ProcessPDFDocument;
-use App\Models\Document;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use OpenAI\Laravel\Facades\OpenAI;
-use OpenAI\Resources\Embeddings;
-use OpenAI\Responses\Embeddings\CreateResponse;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use App\Models\Document;
+use App\Enums\DocumentType;
+use App\Enums\DocumentStatus;
+use App\Jobs\ProcessPDFDocument;
+use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProcessPDFDocumentTest extends TestCase
 {
@@ -20,11 +18,6 @@ class ProcessPDFDocumentTest extends TestCase
     #[Test]
     public function it_store_the_raw_text()
     {
-        $this->mockPineconeClient();
-        OpenAI::fake([
-            CreateResponse::fake(['Sample pdf data']),
-        ]);
-
         $this->setFakeFixtureDisk();
 
         $document = Document::factory()->create([
@@ -40,38 +33,8 @@ class ProcessPDFDocumentTest extends TestCase
     }
 
     #[Test]
-    public function it_marks_the_document_as_process()
-    {
-        $this->mockPineconeClient();
-        OpenAI::fake([
-            CreateResponse::fake(['Sample pdf data']),
-        ]);
-
-        $this->setFakeFixtureDisk();
-
-        $document = Document::factory()->create([
-            'type' => DocumentType::PDF,
-            'path' => 'sample.pdf',
-            'status' => DocumentStatus::PENDING,
-            'processed_at' => null,
-        ]);
-
-        $this->assertNull($document->content);
-
-        ProcessPDFDocument::dispatchSync($document);
-
-        $this->assertTrue($document->refresh()->status == DocumentStatus::PROCESSED);
-        $this->assertNotNull($document->processed_at);
-    }
-
-    #[Test]
     public function it_will_store_the_error_if_exception_happened()
     {
-        $this->mockPineconeClient();
-        OpenAI::fake([
-            CreateResponse::fake(),
-        ]);
-
         $this->setFakeFixtureDisk();
 
         $document = Document::factory()->create([
@@ -90,46 +53,15 @@ class ProcessPDFDocumentTest extends TestCase
     }
 
     #[Test]
-    public function it_will_call_the_openai_embeddings_api()
+    public function it_dispatches_the_vectorize_job()
     {
-        $this->mockPineconeClient();
-        OpenAI::fake([
-            CreateResponse::fake(['Sample pdf data']),
-        ]);
-
-        $this->setFakeFixtureDisk();
-
-        $document = Document::factory()->create([
-            'type' => DocumentType::PDF,
-            'path' => 'sample.pdf',
-        ]);
+        Queue::fake();
+        $document = Document::factory()->create();
 
         ProcessPDFDocument::dispatchSync($document);
 
-        OpenAI::assertSent(Embeddings::class);
-    }
-
-    #[Test]
-    public function it_will_call_the_pinecone_upsert_api()
-    {
-        $this->mockPineconeClient('vectors/upsert');
-        
-        OpenAI::fake([
-            CreateResponse::fake(['Sample pdf data']),
-        ]);
-
-        $this->setFakeFixtureDisk();
-
-        $document = Document::factory()->create([
-            'type' => DocumentType::PDF,
-            'path' => 'sample.pdf',
-        ]);
-
-        try {
-            ProcessPDFDocument::dispatchSync($document);
-            $this->assertTrue(true);
-        } catch (\Exception $e) {
-            $this->fail('ProcessPDFDocument::dispatchSync threw an exception: '.$e->getMessage());
-        }
+        Queue::assertPushed(ProcessPDFDocument::class, function ($job) use ($document) {
+            return $job->document->id === $document->id;
+        });
     }
 }

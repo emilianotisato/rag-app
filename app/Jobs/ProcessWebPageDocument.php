@@ -26,6 +26,6 @@ class ProcessWebPageDocument implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        // TODO
     }
 }
