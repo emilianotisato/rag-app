@@ -47,7 +47,7 @@ class DocumentController extends Controller
         $document = Document::create($data);
         app(DocumentManager::class)->process($document);
 
-        return to_route('document.index');
+        return to_route('documents.index');
     }
 
     /**

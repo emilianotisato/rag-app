@@ -17,7 +17,7 @@ import { Head } from "@inertiajs/vue3";
         <div
           class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0"
         >
-          <div @click="router.visit(route('document.index'))"
+          <div @click="router.visit(route('documents.index'))"
             class="rounded-bl-lg rounded-br-lg sm:rounded-bl-none group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
           >
             <div>
@@ -65,6 +65,7 @@ import { Head } from "@inertiajs/vue3";
             </span>
           </div>
           <div
+          @click="router.visit(route('chats.index'))"
             class="sm:rounded-tr-lg group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
           >
             <div>

@@ -8,7 +8,9 @@ use App\Enums\DocumentType;
 use App\Jobs\ProcessPDFDocument;
 use App\Jobs\ProcessTextDocument;
 use Illuminate\Support\Collection;
+use OpenAI\Laravel\Facades\OpenAI;
 use App\Jobs\ProcessWebPageDocument;
+use Probots\Pinecone\Client as Pinecone;
 
 class DocumentManager
 {
@@ -36,5 +38,32 @@ class DocumentManager
 		}, []); // initial value is an empty array
 		
 		return collect($chunks);
+    }
+
+    public function search(string $query): string
+    {
+        $embeddings = OpenAI::embeddings()->create([
+            'model' => 'text-embedding-3-small',
+            'input' => $query,
+        ])->embeddings;
+
+        
+        $pinecone = new Pinecone(config('services.pinecone.api_key'), config('services.pinecone.index_host'));
+       
+        $response = $pinecone->data()->vectors()->query(
+            vector: $embeddings[0]->embedding,
+            topK: 4,
+        );
+
+        $vectorTexts = '';
+        if($response->successful()) {
+            foreach($response->array()['matches'] as $data) {
+                $vectorTexts .= $data['metadata']['text'] . "\n";
+            }
+        } else {
+            // TODO, should we throw an exception here?
+        }
+
+        return $vectorTexts;
     }
 }

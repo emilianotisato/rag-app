@@ -28,7 +28,7 @@ function submit() {
   <AuthenticatedLayout>
     <template #header>
     <div class="flex">
-      <Link :href="route('document.index')" class="mr-2">
+      <Link :href="route('documents.index')" class="mr-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
