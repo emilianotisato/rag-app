@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Jobs;
 
+use App\Enums\DocumentStatus;
 use App\Enums\DocumentType;
 use App\Jobs\ProcessPDFDocument;
 use App\Models\Document;
@@ -36,6 +37,31 @@ class ProcessPDFDocumentTest extends TestCase
         ProcessPDFDocument::dispatchSync($document);
 
         $this->assertNotNull($document->refresh()->content);
+    }
+
+    #[Test]
+    public function it_marks_the_document_as_process()
+    {
+        $this->mockPineconeClient();
+        OpenAI::fake([
+            CreateResponse::fake(['Sample pdf data']),
+        ]);
+
+        $this->setFakeFixtureDisk();
+
+        $document = Document::factory()->create([
+            'type' => DocumentType::PDF,
+            'path' => 'sample.pdf',
+            'status' => DocumentStatus::PENDING,
+            'processed_at' => null,
+        ]);
+
+        $this->assertNull($document->content);
+
+        ProcessPDFDocument::dispatchSync($document);
+
+        $this->assertTrue($document->refresh()->status == DocumentStatus::PROCESSED);
+        $this->assertNotNull($document->processed_at);
     }
 
     #[Test]

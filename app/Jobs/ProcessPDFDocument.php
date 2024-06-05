@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\DocumentStatus;
 use App\Models\Document;
 use Spatie\PdfToText\Pdf;
 use Illuminate\Support\Str;
@@ -61,6 +62,11 @@ class ProcessPDFDocument implements ShouldQueue
                 ])->toArray(),
             );
         });
+
+        $this->document->update([
+            'status' => DocumentStatus::PROCESSED,
+            'processed_at' => now(),
+        ]);
             
     }
 }
