@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { router } from "@inertiajs/vue3";
-import { Head } from "@inertiajs/vue3";
+import { router, Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   documents: Array,
@@ -13,22 +12,41 @@ const props = defineProps({
 
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Training documents
-      </h2>
+      <div class="flex">
+        <Link :href="route('dashboard')" class="mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+        </Link>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          Training documents
+        </h2>
+      </div>
     </template>
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="px-4 sm:px-6 lg:px-8 bg-white ">
+        <div class="px-4 sm:px-6 lg:px-8 bg-white">
           <div class="sm:flex sm:items-center">
-            <div class="sm:flex-auto">
-              
+            <div v-if="documents.length > 0" class="sm:flex-auto">
+              Your existing documents:
             </div>
-            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-              <button @click="router.visit(route('document.create'))"
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none p-4">
+              <button
+                @click="router.visit(route('document.create'))"
                 type="button"
-                class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm text-white font-semibold shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Add document
               </button>
@@ -36,7 +54,10 @@ const props = defineProps({
           </div>
           <div class="mt-8 flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <div
+                v-if="documents.length > 0"
+                class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+              >
                 <table class="min-w-full divide-y divide-gray-300">
                   <thead>
                     <tr>
@@ -58,7 +79,7 @@ const props = defineProps({
                       >
                         Status
                       </th>
-                      
+
                       <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                         <span class="sr-only">Edit</span>
                       </th>
@@ -87,6 +108,12 @@ const props = defineProps({
                     </tr>
                   </tbody>
                 </table>
+              </div>
+              <div
+                v-else
+                class="inline-block min-w-full py-4 align-middle sm:px-6 lg:px-8"
+              >
+                <h2>No documents yet... Add your first document.</h2>
               </div>
             </div>
           </div>

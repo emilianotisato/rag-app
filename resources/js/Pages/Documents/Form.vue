@@ -1,8 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { router } from "@inertiajs/vue3";
-import { Head } from "@inertiajs/vue3";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm, Head, Link } from "@inertiajs/vue3";
 
 const props = defineProps({
   categories: Array,
@@ -29,7 +27,25 @@ function submit() {
 
   <AuthenticatedLayout>
     <template #header>
+    <div class="flex">
+      <Link :href="route('document.index')" class="mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+        </Link>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">Form</h2>
+    </div>
     </template>
 
     <div class="py-12">

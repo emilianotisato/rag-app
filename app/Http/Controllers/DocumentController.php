@@ -18,7 +18,7 @@ class DocumentController extends Controller
     {
         return Inertia::render('Documents/Index', [
             // TODO paginate documents in frontend
-            'documents' => Document::all(),
+            'documents' => Document::select('id', 'name', 'type', 'status')->get(),
         ]);
     }
 
