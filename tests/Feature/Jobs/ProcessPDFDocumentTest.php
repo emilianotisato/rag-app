@@ -65,6 +65,31 @@ class ProcessPDFDocumentTest extends TestCase
     }
 
     #[Test]
+    public function it_will_store_the_error_if_exception_happened()
+    {
+        $this->mockPineconeClient();
+        OpenAI::fake([
+            CreateResponse::fake(),
+        ]);
+
+        $this->setFakeFixtureDisk();
+
+        $document = Document::factory()->create([
+            'type' => DocumentType::PDF,
+            'path' => 'unreachable.pdf',
+            'status' => DocumentStatus::PENDING,
+            'errors' => null,
+        ]);
+
+        $this->assertNull($document->content);
+
+        ProcessPDFDocument::dispatchSync($document);
+
+        $this->assertTrue($document->refresh()->status == DocumentStatus::FAILED);
+        $this->assertNotNull($document->refresh()->errors);
+    }
+
+    #[Test]
     public function it_will_call_the_openai_embeddings_api()
     {
         $this->mockPineconeClient();

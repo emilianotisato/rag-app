@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('path')->nullable();
             $table->string('status')->default(DocumentStatus::PENDING);
             $table->longText('content')->nullable();
-            $table->json('error')->nullable();
+            $table->json('errors')->nullable();
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

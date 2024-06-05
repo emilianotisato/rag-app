@@ -24,7 +24,7 @@ class DocumentFactory extends Factory
             'path' => $this->faker->url,
             'status' => DocumentStatus::PENDING,
             'content' => null,
-            'error' => null,
+            'errors' => null,
             'processed_at' => null,
         ];
     }
