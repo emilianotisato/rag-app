@@ -38,7 +38,9 @@ class VectorizeAndIndexDocument implements ShouldQueue
                 'model' => 'text-embedding-3-small',
                 'input' => $content->toArray(),
             ])->embeddings;
+
             $pinecone = new Pinecone(config('services.pinecone.api_key'), config('services.pinecone.index_host'));
+            
             collect($embeddings)->chunk(20)->each(function (Collection $chunk, $chunkIndex) use ($pinecone, $content) {
                 $pinecone->data()->vectors()->upsert(
                     vectors: $chunk->pluck('embedding')->map(fn ($embedding, $index) => [

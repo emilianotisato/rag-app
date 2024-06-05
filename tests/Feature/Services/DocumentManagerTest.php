@@ -5,12 +5,16 @@ namespace Tests\Feature\Services;
 use Tests\TestCase;
 use App\Models\Document;
 use App\Enums\DocumentType;
+use Probots\Pinecone\Response;
 use App\Jobs\ProcessPDFDocument;
 use App\Services\DocumentManager;
+use OpenAI\Laravel\Facades\OpenAI;
 use App\Jobs\ProcessWebPageDocument;
+use Saloon\Http\Faking\MockResponse;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Foundation\Testing\WithFaker;
+use OpenAI\Responses\Embeddings\CreateResponse;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DocumentManagerTest extends TestCase
@@ -69,5 +73,20 @@ class DocumentManagerTest extends TestCase
         
         $this->assertEquals(1, $chunks->count());
         $this->assertEquals($longTextWithNoNewLines, $chunks->first());
+    }
+
+    #[Test]
+    public function it_can_query_the_vector_database()
+    {
+        $response = MockResponse::fixture('query_vectors');
+        $this->mockPineconeClient('query', $response);
+        OpenAI::fake([
+            CreateResponse::fake(),
+        ]);
+
+        $result = app(DocumentManager::class)->search('data');
+
+        $this->assertEquals("Sample data\n", $result);
+        
     }
 }
