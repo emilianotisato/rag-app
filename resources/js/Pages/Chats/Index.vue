@@ -95,7 +95,7 @@ const props = defineProps({
                 v-else
                 class="inline-block min-w-full py-4 align-middle sm:px-6 lg:px-8"
               >
-                <h2>No chats yet... Add your first document.</h2>
+                <h2>No chats yet... Start a new research.</h2>
               </div>
             </div>
           </div>

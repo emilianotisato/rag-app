@@ -12,7 +12,7 @@ const formData = useForm({
 });
 
 function submit() {
-  router.post(route("chats.store"), formData);
+  router.post(route("chats.prompt", {chat: props.chat.id}), formData);
 }
 </script>
 
@@ -100,10 +100,9 @@ function submit() {
               <textarea
                 v-model="formData.prompt"
                 rows="2"
-                name="comment"
                 id="comment"
                 class="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                placeholder="Escribe tu siguiente pregunta..."
+                placeholder="Write down your next question..."
               ></textarea>
             </div>
 

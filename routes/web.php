@@ -23,6 +23,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('/documents', DocumentController::class);
     Route::resource('/chats', ChatController::class);
+    Route::post('/chats/{chat}/prompt', [ChatController::class, 'prompt'])->name('chats.prompt');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
