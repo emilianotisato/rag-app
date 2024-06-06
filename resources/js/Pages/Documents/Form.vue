@@ -16,7 +16,7 @@ const formData = useForm({
 });
 
 function submit() {
-  router.post(route("document.store"), formData, {
+  router.post(route("documents.store"), formData, {
     forceFormData: true,
   });
 }
