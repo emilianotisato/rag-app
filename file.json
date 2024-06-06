@@ -1,0 +1,1 @@
+[{"role":"system","content":"Use the following knowledge to answer if applies: ```Sample data\n```"},{"role":"user","content":"Demo message by user"},{"role":"assistant","content":"Demo message by GPT"},{"role":"user","content":"New message by user"}]
